@@ -15,6 +15,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
     private var searchResults = [SearchResult]()
     private var hasSearched = false
     private var isLoading = false
+    var dataTask: URLSessionDataTask?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -145,22 +146,28 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !searchBar.text!.isEmpty {
-            searchBar.resignFirstResponder()
+            searchBar.resignFirstResponder() // hide keyboard
+            dataTask?.cancel() //cancel previous search
 
-            isLoading = true
+            isLoading = true // show loading tableViewCell
             tableView.reloadData()
 
             hasSearched = true
             searchResults = []
 
-
+            // URLSession (request data from itunes)
             let url = self.iTunesURL(searchText: searchBar.text!)
             let session = URLSession.shared
 
-            let dataTask = session.dataTask(with: url, completionHandler : { data, response, error in
-                if let error = error {
+            dataTask = session.dataTask(with: url, completionHandler : { data, response, error in
+                if let error = error as NSError? {
+                    if error.code == -999 {
+                        return // user cancelled search
+                    }
                     print("Failure! \n \(error)")
-                } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+                }
+                // the  request was only successful if the status code returned was 200
+                else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
 
                     if let data = data {
                         self.searchResults = self.parse(data: data)
@@ -185,7 +192,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
                     self.showNetworkError()
                 }
             })
-            dataTask.resume()
+            dataTask?.resume()
 
         }
     }
