@@ -59,16 +59,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
         return url!
     }
 
-    func performStoreRequest(with url: URL) -> Data? {
-        do {
-            return try Data(contentsOf: url)
-        } catch {
-            print("Download Error: \(error.localizedDescription)")
-            showNetworkError()
-            return nil
-        }
-    }
-
     func parse(data: Data) -> [SearchResult] {
         do {
             let decoder = JSONDecoder()  //NOTE: ResultArray is an custom object to store the wrapper returned from JSON HTTP Request
@@ -156,7 +146,6 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
-            let searchedText = searchBar.text!
 
             isLoading = true
             tableView.reloadData()
@@ -164,24 +153,40 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
             hasSearched = true
             searchResults = []
 
-            let queue = DispatchQueue.global()
-            queue.async {
-                let url = self.iTunesURL(searchText: searchedText)
-                if let data = self.performStoreRequest(with: url) {
-                    self.searchResults = self.parse(data: data)
-                    self.searchResults.sort {
-                        $0.name.localizedStandardCompare( $1.name) == .orderedAscending
-                    }
 
-                    DispatchQueue.main.async {
-                        self.isLoading = false
-                        self.tableView.reloadData()
+            let url = self.iTunesURL(searchText: searchBar.text!)
+            let session = URLSession.shared
+
+            let dataTask = session.dataTask(with: url, completionHandler : { data, response, error in
+                if let error = error {
+                    print("Failure! \n \(error)")
+                } else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+
+                    if let data = data {
+                        self.searchResults = self.parse(data: data)
+                        self.searchResults.sort {
+                            $0.name.localizedStandardCompare( $1.name) == .orderedAscending
+                        }
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            self.tableView.reloadData()
+                        }
+                        return
                     }
-                    return
+                } else {
+                    print("Failure! \n \(response!)")
                 }
-            }
 
-            
+                // if we didnt return we have a problem and will reset the tableview to be blank and display the error alert
+                DispatchQueue.main.async {
+                    self.hasSearched = false
+                    self.isLoading = false
+                    self.tableView.reloadData()
+                    self.showNetworkError()
+                }
+            })
+            dataTask.resume()
+
         }
     }
 

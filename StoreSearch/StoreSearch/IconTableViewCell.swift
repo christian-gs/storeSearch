@@ -18,6 +18,8 @@ class IconTableViewCell: UITableViewCell {
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
 
+        iconImageView.image = #imageLiteral(resourceName: "default")
+        iconImageView.contentMode = .scaleAspectFit
         artistLabel.textAlignment = .center
         artistLabel.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 0.5)
         
