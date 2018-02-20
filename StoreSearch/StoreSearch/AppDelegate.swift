@@ -19,9 +19,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = SearchViewController()
         window.makeKeyAndVisible()
-        self.window = window 
+        self.window = window
+
+        customizeAppearance()
 
         return true
+    }
+
+    func customizeAppearance() {
+        UISearchBar.appearance().barTintColor = #colorLiteral(red: 0.03921568627, green: 0.3137254902, blue: 0.3137254902, alpha: 1) 
+        window!.tintColor = #colorLiteral(red: 0.03921568627, green: 0.2352941176, blue: 0.2352941176, alpha: 1)
+
+
     }
 
     func applicationWillResignActive(_ application: UIApplication) {
