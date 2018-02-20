@@ -17,6 +17,9 @@ class IconTableViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+
+        artistLabel.textAlignment = .center
+        artistLabel.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 0.5)
         
         for v in [iconImageView, nameLabel, artistLabel] as! [UIView] {
             v.translatesAutoresizingMaskIntoConstraints = false

@@ -14,6 +14,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
     private var tableView = UITableView()
     private var searchResults = [SearchResult]()
     private var hasSearched = false
+    private var isLoading = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
         tableView.dataSource = self
         tableView.tableFooterView = UIView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(SpinnerTableViewCell.self, forCellReuseIdentifier: "spinnerCell")
         tableView.register(IconTableViewCell.self, forCellReuseIdentifier: "iconCell")
 
         for v in [searchBar, tableView] as! [UIView]{
@@ -88,7 +90,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
 
     //MARK- TableViewDelegateMethods
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if !hasSearched {
+
+        if isLoading {
+            return 1
+        }
+        else if !hasSearched {
             return 0
         } else if searchResults.count == 0 {
             return 1
@@ -110,7 +116,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if searchResults.count == 0 {
+        if searchResults.count == 0 || isLoading {
             return nil
         } else {
             return indexPath
@@ -119,7 +125,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-        if searchResults.count == 0 {
+        if isLoading {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "spinnerCell") as! SpinnerTableViewCell
+            cell.loadingLabel.text = "Loading..."
+            cell.startAnimating()
+            return cell
+        } else if searchResults.count == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell")
             cell!.textLabel?.text = "Nothing found"
             cell!.textLabel?.textAlignment = .center
@@ -129,7 +140,13 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
             let searchResult = searchResults[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "iconCell") as! IconTableViewCell
             cell.nameLabel.text = searchResult.name
-            cell.artistLabel.text = searchResult.artistName
+
+            if searchResult.artistName.isEmpty {
+                cell.artistLabel.text = "Unkown"
+            } else {
+                cell.artistLabel.text = String(format: "%@ (%@)", searchResult.artistName, searchResult.type)
+            }
+            
             return cell
         }
     }
@@ -139,17 +156,32 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         if !searchBar.text!.isEmpty {
             searchBar.resignFirstResponder()
+            let searchedText = searchBar.text!
+
+            isLoading = true
+            tableView.reloadData()
 
             hasSearched = true
             searchResults = []
 
-            let url = iTunesURL(searchText: searchBar.text!)
-            print("URL: '\(url)'")
+            let queue = DispatchQueue.global()
+            queue.async {
+                let url = self.iTunesURL(searchText: searchedText)
+                if let data = self.performStoreRequest(with: url) {
+                    self.searchResults = self.parse(data: data)
+                    self.searchResults.sort {
+                        $0.name.localizedStandardCompare( $1.name) == .orderedAscending
+                    }
 
-            if let data = performStoreRequest(with: url) {
-                 searchResults = parse(data: data)
+                    DispatchQueue.main.async {
+                        self.isLoading = false
+                        self.tableView.reloadData()
+                    }
+                    return
+                }
             }
-                tableView.reloadData()
+
+            
         }
     }
 

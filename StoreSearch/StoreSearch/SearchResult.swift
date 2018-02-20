@@ -18,16 +18,34 @@ class SearchResult:Codable, CustomStringConvertible {
     
     //this will be returned when trying to use this class as a string
     var description: String {
-        return "Kind: \(kind ?? ""), Name: \(name), Artist Name: \(artistName ?? ""), Genre: \(genre)"
+        return "Kind: \(kind ?? ""), Name: \(name), Artist Name: \(artistName), Genre: \(genre)"
     }
 
     var kind : String?
+    var type:String {
+        let kind = self.kind ?? "audiobook"
+        switch kind {
+            case "album": return "Album"
+            case "audiobook": return "Audio Book"
+            case "book": return "Book"
+            case "ebook": return "E-Book"
+            case "feature-movie": return "Movie"
+            case "music-video": return "Music Video"
+            case "podcast": return "Podcast"
+            case "software": return "App"
+            case "song": return "Song"
+            case "tv-episode": return "TV Episode"
+            default: break
+        }
+        return "Unknown"
+    }
+    
     var trackName : String?
-    var artistName : String?
     var collectionName:String?
     var name:String {
         return trackName ?? collectionName ?? ""
     }
+    var artistName = " "
 
     var imageSmall = ""
     var imageLarge = ""
