@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AA1AB570203B864000562D69 /* IconTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1AB56F203B864000562D69 /* IconTableViewCell.swift */; };
 		AA1AB572203BD3D900562D69 /* SpinnerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1AB571203BD3D900562D69 /* SpinnerTableViewCell.swift */; };
+		AA1BCBD0203E328200301F2C /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1BCBCF203E328200301F2C /* GradientView.swift */; };
 		AA1C1481203CE875001423F3 /* UIImageiewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1C1480203CE875001423F3 /* UIImageiewExtension.swift */; };
 		AA1C1485203D2678001423F3 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1C1484203D2678001423F3 /* DetailsViewController.swift */; };
 		AAFDACAE203A600C00E13EE4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFDACAD203A600C00E13EE4 /* AppDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* Begin PBXFileReference section */
 		AA1AB56F203B864000562D69 /* IconTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTableViewCell.swift; sourceTree = "<group>"; };
 		AA1AB571203BD3D900562D69 /* SpinnerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerTableViewCell.swift; sourceTree = "<group>"; };
+		AA1BCBCF203E328200301F2C /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
 		AA1C1480203CE875001423F3 /* UIImageiewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageiewExtension.swift; sourceTree = "<group>"; };
 		AA1C1484203D2678001423F3 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		AAFDACAA203A600C00E13EE4 /* StoreSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoreSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -72,6 +74,7 @@
 				AA1AB571203BD3D900562D69 /* SpinnerTableViewCell.swift */,
 				AA1C1480203CE875001423F3 /* UIImageiewExtension.swift */,
 				AA1C1484203D2678001423F3 /* DetailsViewController.swift */,
+				AA1BCBCF203E328200301F2C /* GradientView.swift */,
 			);
 			path = StoreSearch;
 			sourceTree = "<group>";
@@ -153,6 +156,7 @@
 				AAFDACAE203A600C00E13EE4 /* AppDelegate.swift in Sources */,
 				AA1C1485203D2678001423F3 /* DetailsViewController.swift in Sources */,
 				AA1AB572203BD3D900562D69 /* SpinnerTableViewCell.swift in Sources */,
+				AA1BCBD0203E328200301F2C /* GradientView.swift in Sources */,
 				AA1C1481203CE875001423F3 /* UIImageiewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

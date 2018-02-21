@@ -21,8 +21,10 @@ class IconTableViewCell: UITableViewCell {
 
         iconImageView.image = #imageLiteral(resourceName: "default")
         iconImageView.contentMode = .scaleAspectFit
-        artistLabel.textAlignment = .center
+
+        //nameLabel.numberOfLines = 0
         artistLabel.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 0.5)
+        artistLabel.numberOfLines = 0
         
         for v in [iconImageView, nameLabel, artistLabel] as! [UIView] {
             v.translatesAutoresizingMaskIntoConstraints = false
@@ -36,9 +38,11 @@ class IconTableViewCell: UITableViewCell {
             iconImageView.widthAnchor.constraint(equalToConstant: 50),
 
             nameLabel.leadingAnchor.constraint(equalTo: iconImageView.trailingAnchor, constant: 10),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             nameLabel.topAnchor.constraint(equalTo: iconImageView.topAnchor),
 
             artistLabel.leadingAnchor.constraint(equalTo: nameLabel.leadingAnchor),
+            artistLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             artistLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 15),
 
         ])
