@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		AA1AB570203B864000562D69 /* IconTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1AB56F203B864000562D69 /* IconTableViewCell.swift */; };
 		AA1AB572203BD3D900562D69 /* SpinnerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1AB571203BD3D900562D69 /* SpinnerTableViewCell.swift */; };
+		AA1C1481203CE875001423F3 /* UIImageiewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1C1480203CE875001423F3 /* UIImageiewExtension.swift */; };
 		AAFDACAE203A600C00E13EE4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFDACAD203A600C00E13EE4 /* AppDelegate.swift */; };
 		AAFDACB0203A600C00E13EE4 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFDACAF203A600C00E13EE4 /* SearchViewController.swift */; };
 		AAFDACB5203A600C00E13EE4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AAFDACB4203A600C00E13EE4 /* Assets.xcassets */; };
@@ -19,6 +20,7 @@
 /* Begin PBXFileReference section */
 		AA1AB56F203B864000562D69 /* IconTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTableViewCell.swift; sourceTree = "<group>"; };
 		AA1AB571203BD3D900562D69 /* SpinnerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerTableViewCell.swift; sourceTree = "<group>"; };
+		AA1C1480203CE875001423F3 /* UIImageiewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageiewExtension.swift; sourceTree = "<group>"; };
 		AAFDACAA203A600C00E13EE4 /* StoreSearch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StoreSearch.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAFDACAD203A600C00E13EE4 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AAFDACAF203A600C00E13EE4 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 				AAFDACBF203A74AD00E13EE4 /* SearchResult.swift */,
 				AA1AB56F203B864000562D69 /* IconTableViewCell.swift */,
 				AA1AB571203BD3D900562D69 /* SpinnerTableViewCell.swift */,
+				AA1C1480203CE875001423F3 /* UIImageiewExtension.swift */,
 			);
 			path = StoreSearch;
 			sourceTree = "<group>";
@@ -146,6 +149,7 @@
 				AAFDACC0203A74AD00E13EE4 /* SearchResult.swift in Sources */,
 				AAFDACAE203A600C00E13EE4 /* AppDelegate.swift in Sources */,
 				AA1AB572203BD3D900562D69 /* SpinnerTableViewCell.swift in Sources */,
+				AA1C1481203CE875001423F3 /* UIImageiewExtension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
