@@ -13,6 +13,7 @@ class IconTableViewCell: UITableViewCell {
     var iconImageView = UIImageView()
     var nameLabel = UILabel()
     var artistLabel = UILabel()
+    var downloadTask: URLSessionDownloadTask?
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
 
@@ -50,6 +51,31 @@ class IconTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    func configure(for result: SearchResult) {
+        nameLabel.text = result.name
+
+        if result.artistName.isEmpty {
+        artistLabel.text = "Unkown"
+        } else {
+        artistLabel.text = String(format: "%@ (%@)", result.artistName, result.type)
+        }
+
+        iconImageView.image = #imageLiteral(resourceName: "default")
+        //download image to cells image view
+        if let imageURL = URL(string: result.imageSmall) {
+            downloadTask = iconImageView.loadImage(url: imageURL)
+
+        }
+
+
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        downloadTask?.cancel() // cancel current image download if cell is going to be reused
+        downloadTask = nil
     }
 
     

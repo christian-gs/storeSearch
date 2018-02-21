@@ -11,6 +11,8 @@ import UIKit
 class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource {
 
     private var searchBar = UISearchBar()
+    private var navigationBar = UINavigationBar()
+    private var segmentedControl = UISegmentedControl(items: ["All", "Music", "Software", "E-books"])
     private var tableView = UITableView()
     private var searchResults = [SearchResult]()
     private var hasSearched = false
@@ -23,6 +25,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
 
         searchBar.delegate = self
+        searchBar.placeholder = "App name, artist, song, album..."
+
+        segmentedControl.selectedSegmentIndex = 0
+        segmentedControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        navigationBar.addSubview(segmentedControl)
 
         tableView.delegate = self
         tableView.dataSource = self
@@ -31,7 +39,9 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
         tableView.register(SpinnerTableViewCell.self, forCellReuseIdentifier: "spinnerCell")
         tableView.register(IconTableViewCell.self, forCellReuseIdentifier: "iconCell")
 
-        for v in [searchBar, tableView] as! [UIView]{
+
+
+        for v in [searchBar, navigationBar, tableView] as! [UIView]{
             v.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview(v)
         }
@@ -41,7 +51,15 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
             searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
-            tableView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            navigationBar.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+            navigationBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            navigationBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+
+            segmentedControl.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor),
+            segmentedControl.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
+            segmentedControl.widthAnchor.constraint(equalToConstant: 300),
+
+            tableView.topAnchor.constraint(equalTo: navigationBar.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
@@ -50,14 +68,79 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
         searchBar.becomeFirstResponder()
     }
 
+    @objc func segmentChanged(_ sender: UISegmentedControl) {
+        performSearch(category: segmentedControl.selectedSegmentIndex)
+    }
+
     // MARK:- HTTP Request methods
-    func iTunesURL(searchText: String) -> URL {
+    func iTunesURL(searchText: String, category: Int) -> URL {
         //encode string to a valid url (eg. turn white space into %20 )
         let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
 
-        let urlString = String(format:"https://itunes.apple.com/search?term=%@", encodedText)
+        let kind: String
+        switch category {
+            case 1: kind = "musicTrack"
+            case 2: kind = "software"
+            case 3: kind = "ebook"
+            default: kind = ""
+        }
+
+        let urlString = "https://itunes.apple.com/search?" + "term=\(encodedText)&limit=200&entity=\(kind)"
         let url = URL(string: urlString)
         return url!
+    }
+
+    func performSearch(category: Int) {
+        if !searchBar.text!.isEmpty {
+            searchBar.resignFirstResponder() // hide keyboard
+            dataTask?.cancel() //cancel previous search
+
+            isLoading = true // show loading tableViewCell
+            tableView.reloadData()
+
+            hasSearched = true
+            searchResults = []
+
+            // URLSession (request data from itunes)
+            let url = self.iTunesURL(searchText: searchBar.text!, category: category)
+            let session = URLSession.shared
+
+            dataTask = session.dataTask(with: url, completionHandler : { data, response, error in
+                if let error = error as NSError? {
+                    if error.code == -999 {
+                        return // user cancelled search
+                    }
+                    print("Failure! \n \(error)")
+                }
+                    // the  request was only successful if the status code returned was 200
+                else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
+
+                    if let data = data {
+                        self.searchResults = self.parse(data: data)
+//                        self.searchResults.sort {
+//                            $0.name.localizedStandardCompare( $1.name) == .orderedAscending
+//                        }
+                        DispatchQueue.main.async {
+                            self.isLoading = false
+                            self.tableView.reloadData()
+                        }
+                        return
+                    }
+                } else {
+                    print("Failure! \n \(response!)")
+                }
+
+                // if we didnt return we have a problem and will reset the tableview to be blank and display the error alert
+                DispatchQueue.main.async {
+                    self.hasSearched = false
+                    self.isLoading = false
+                    self.tableView.reloadData()
+                    self.showNetworkError()
+                }
+            })
+            dataTask?.resume()
+
+        }
     }
 
     func parse(data: Data) -> [SearchResult] {
@@ -130,71 +213,16 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
         } else {
             let searchResult = searchResults[indexPath.row]
             let cell = tableView.dequeueReusableCell(withIdentifier: "iconCell") as! IconTableViewCell
-            cell.nameLabel.text = searchResult.name
 
-            if searchResult.artistName.isEmpty {
-                cell.artistLabel.text = "Unkown"
-            } else {
-                cell.artistLabel.text = String(format: "%@ (%@)", searchResult.artistName, searchResult.type)
-            }
+            cell.configure(for: searchResult)
             
             return cell
         }
     }
 
     //MARK- SearchBarDelegateMethods
-
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        if !searchBar.text!.isEmpty {
-            searchBar.resignFirstResponder() // hide keyboard
-            dataTask?.cancel() //cancel previous search
-
-            isLoading = true // show loading tableViewCell
-            tableView.reloadData()
-
-            hasSearched = true
-            searchResults = []
-
-            // URLSession (request data from itunes)
-            let url = self.iTunesURL(searchText: searchBar.text!)
-            let session = URLSession.shared
-
-            dataTask = session.dataTask(with: url, completionHandler : { data, response, error in
-                if let error = error as NSError? {
-                    if error.code == -999 {
-                        return // user cancelled search
-                    }
-                    print("Failure! \n \(error)")
-                }
-                // the  request was only successful if the status code returned was 200
-                else if let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 {
-
-                    if let data = data {
-                        self.searchResults = self.parse(data: data)
-                        self.searchResults.sort {
-                            $0.name.localizedStandardCompare( $1.name) == .orderedAscending
-                        }
-                        DispatchQueue.main.async {
-                            self.isLoading = false
-                            self.tableView.reloadData()
-                        }
-                        return
-                    }
-                } else {
-                    print("Failure! \n \(response!)")
-                }
-
-                // if we didnt return we have a problem and will reset the tableview to be blank and display the error alert
-                DispatchQueue.main.async {
-                    self.hasSearched = false
-                    self.isLoading = false
-                    self.tableView.reloadData()
-                    self.showNetworkError()
-                }
-            })
-            dataTask?.resume()
-
-        }
+        performSearch(category: segmentedControl.selectedSegmentIndex)
     }
 
     //attach search bar to status bar
