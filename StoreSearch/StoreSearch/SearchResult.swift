@@ -89,16 +89,3 @@ class SearchResult:Codable, CustomStringConvertible {
 
 }
 
-//extension SearchResult: Decodable, Encodable {
-//
-//    init(from decoder: Decoder) throws {
-//        let values = try decoder.container(keyedBy: CodingKeys.self)
-//        latitude = try values.decode(Double.self, forKey: .latitude)
-//        longitude = try values.decode(Double.self, forKey: .longitude)
-//
-//        let additionalInfo = try values.nestedContainer(keyedBy: AdditionalInfoKeys.self, forKey: .additionalInfo)
-//        elevation = try additionalInfo.decode(Double.self, forKey: .elevation)
-//    }
-//
-//}
-

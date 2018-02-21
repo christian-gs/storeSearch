@@ -187,6 +187,11 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+
+        let detailsViewController = DetailsViewController(searchResult: searchResults[indexPath.row])
+        detailsViewController.modalTransitionStyle = .crossDissolve
+        detailsViewController.modalPresentationStyle = .overCurrentContext
+        present(detailsViewController, animated: true, completion: nil)
     }
 
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
