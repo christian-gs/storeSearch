@@ -22,9 +22,7 @@ class IconTableViewCell: UITableViewCell {
         iconImageView.image = #imageLiteral(resourceName: "default")
         iconImageView.contentMode = .scaleAspectFit
 
-        //nameLabel.numberOfLines = 0
         artistLabel.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 0.5)
-        artistLabel.numberOfLines = 0
         
         for v in [iconImageView, nameLabel, artistLabel] as! [UIView] {
             v.translatesAutoresizingMaskIntoConstraints = false
