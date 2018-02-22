@@ -18,6 +18,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
     private var hasSearched = false
     private var isLoading = false
     var dataTask: URLSessionDataTask?
+    var landscapeVC : LandscapeViewController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +67,77 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
         ])
 
         searchBar.becomeFirstResponder()
+
+        let orientation = UIApplication.shared.statusBarOrientation
+        if  orientation == .landscapeLeft || orientation == .landscapeRight{
+
+            let controller = LandscapeViewController(searchResults: self.searchResults)
+            controller.view.frame = view.bounds
+
+            view.addSubview(controller.view)
+            addChildViewController(controller)
+            controller.didMove(toParentViewController: self) // set landscapeVC as active controller
+
+            landscapeVC = controller
+
+        }
+    }
+
+    override func willTransition( to newCollection: UITraitCollection, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        switch newCollection.verticalSizeClass {
+        case .compact:
+            showLandscape(with: coordinator)
+        case .regular, .unspecified:
+            hideLandscape(with: coordinator)
+        }
+    }
+
+    func showLandscape(with coordinator: UIViewControllerTransitionCoordinator) {
+        guard landscapeVC == nil else { return }
+
+        let controller = LandscapeViewController(searchResults: self.searchResults)
+        controller.view.frame = view.bounds
+
+        view.addSubview(controller.view)
+        addChildViewController(controller)
+
+        //play crossfade animation (change alpha from 0 to 1)
+        controller.view.alpha = 0
+        coordinator.animate(alongsideTransition: { _ in
+            controller.view.alpha = 1
+
+            self.searchBar.resignFirstResponder() // remove keyboard
+            if self.presentedViewController != nil { // if currently presenting the detailsView dismiss it
+                self.dismiss(animated: true, completion: nil)
+            }
+        }, completion: { _ in
+            controller.didMove(toParentViewController: self) // set landscapeVC as active controller
+        })
+
+        landscapeVC = controller
+
+    }
+
+    func hideLandscape(with coordinator: UIViewControllerTransitionCoordinator) {
+
+        if let controller = landscapeVC {
+            controller.willMove(toParentViewController: nil)
+
+            // cross fade transition (chenge alpha from 1 to 0)
+            coordinator.animate(alongsideTransition: { _ in
+                controller.view.alpha = 0
+                if self.presentedViewController != nil { // if currently presenting the detailsView dismiss it
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }, completion: { _ in
+                controller.view.removeFromSuperview() // remove landscape controller
+                controller.removeFromParentViewController()
+                self.landscapeVC = nil
+            })
+
+            landscapeVC = nil
+        }
     }
 
     @objc func segmentChanged(_ sender: UISegmentedControl) {
