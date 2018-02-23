@@ -95,8 +95,8 @@ class DetailsViewController: UIViewController {
             gradientView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
             detailView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            detailView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            detailView.widthAnchor.constraint(equalToConstant: (view.frame.size.width/4 * 3) ), // 3/4 of the screen
+            detailView.centerYAnchor.constraint(equalTo: view.centerYAnchor),                 // 1/2 of screen or 3/4 of the screen depending on orientation
+            detailView.widthAnchor.constraint(equalToConstant: isLandscapeOrientation() ? view.frame.size.width/2 : (view.frame.size.width/4 * 3) ),
             detailView.heightAnchor.constraint(greaterThanOrEqualToConstant: view.frame.size.height/2),
 
             closeButton.leadingAnchor.constraint(equalTo: detailView.leadingAnchor, constant: 10),

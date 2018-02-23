@@ -10,7 +10,7 @@ import UIKit
 
 class iconCollectionViewCell: UICollectionViewCell {
 
-    let iconButton = UIButton()
+    let iconImageView = UIImageView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,13 +20,13 @@ class iconCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 10
         contentView.layer.masksToBounds = true
 
-        iconButton.setImage(#imageLiteral(resourceName: "default"), for: .normal)
-        iconButton.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(iconButton)
+        iconImageView.image = #imageLiteral(resourceName: "default")
+        iconImageView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(iconImageView)
 
         NSLayoutConstraint.activate([
-            iconButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            iconButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            iconImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            iconImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
 
         ])
     }
@@ -36,7 +36,7 @@ class iconCollectionViewCell: UICollectionViewCell {
     }
 
     override func prepareForReuse() {
-        iconButton.setImage(#imageLiteral(resourceName: "default"), for: .normal)
+        iconImageView.image = #imageLiteral(resourceName: "default")
         super.prepareForReuse()
     }
     

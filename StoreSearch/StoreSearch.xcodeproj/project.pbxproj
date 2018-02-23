@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA1627E0203F9CCB00066C71 /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1627DF203F9CCB00066C71 /* Functions.swift */; };
 		AA1AB570203B864000562D69 /* IconTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1AB56F203B864000562D69 /* IconTableViewCell.swift */; };
 		AA1AB572203BD3D900562D69 /* SpinnerTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1AB571203BD3D900562D69 /* SpinnerTableViewCell.swift */; };
 		AA1BCBD0203E328200301F2C /* GradientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1BCBCF203E328200301F2C /* GradientView.swift */; };
@@ -22,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA1627DF203F9CCB00066C71 /* Functions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
+		AA1627E3203FAD2800066C71 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		AA1AB56F203B864000562D69 /* IconTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconTableViewCell.swift; sourceTree = "<group>"; };
 		AA1AB571203BD3D900562D69 /* SpinnerTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinnerTableViewCell.swift; sourceTree = "<group>"; };
 		AA1BCBCF203E328200301F2C /* GradientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientView.swift; sourceTree = "<group>"; };
@@ -105,6 +108,7 @@
 				AA1BCBD3203E413200301F2C /* Data Model */,
 				AAFDACB4203A600C00E13EE4 /* Assets.xcassets */,
 				AAFDACB9203A600C00E13EE4 /* Info.plist */,
+				AA1627DF203F9CCB00066C71 /* Functions.swift */,
 			);
 			path = StoreSearch;
 			sourceTree = "<group>";
@@ -184,6 +188,7 @@
 				AA1BCBD5203E419600301F2C /* LandscapeViewController.swift in Sources */,
 				AA1AB570203B864000562D69 /* IconTableViewCell.swift in Sources */,
 				AA1BCBD7203E597900301F2C /* iconCollectionViewCell.swift in Sources */,
+				AA1627E0203F9CCB00066C71 /* Functions.swift in Sources */,
 				AAFDACC0203A74AD00E13EE4 /* SearchResult.swift in Sources */,
 				AAFDACAE203A600C00E13EE4 /* AppDelegate.swift in Sources */,
 				AA1C1485203D2678001423F3 /* DetailsViewController.swift in Sources */,
@@ -200,6 +205,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				AAFDACB7203A600C00E13EE4 /* Base */,
+				AA1627E3203FAD2800066C71 /* nl */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -211,6 +217,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -268,6 +275,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

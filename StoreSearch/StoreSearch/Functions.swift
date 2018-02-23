@@ -6,4 +6,12 @@
 //  Copyright © 2018 Gridstone. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+func isLandscapeOrientation () -> Bool {
+    let orientation = UIApplication.shared.statusBarOrientation
+    if  orientation == .landscapeLeft || orientation == .landscapeRight{
+        return true
+    }
+    return false
+}

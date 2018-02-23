@@ -68,8 +68,8 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
 
         searchBar.becomeFirstResponder()
 
-        let orientation = UIApplication.shared.statusBarOrientation
-        if  orientation == .landscapeLeft || orientation == .landscapeRight{
+        //check orientation on load
+        if isLandscapeOrientation() {
 
             let controller = LandscapeViewController(searchResults: self.searchResults)
             controller.view.frame = view.bounds
@@ -146,6 +146,12 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
 
     // MARK:- HTTP Request methods
     func iTunesURL(searchText: String, category: Int) -> URL {
+
+        // Determine user region
+        let locale = Locale.autoupdatingCurrent
+        let language = locale.identifier
+        let countryCode = locale.regionCode ?? "en_US"
+
         //encode string to a valid url (eg. turn white space into %20 )
         let encodedText = searchText.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
 
@@ -158,6 +164,7 @@ class SearchViewController: UIViewController, UISearchBarDelegate, UITableViewDe
         }
 
         let urlString = "https://itunes.apple.com/search?" + "term=\(encodedText)&limit=200&entity=\(kind)"
+            + "&lang=\(language)&country=\(countryCode)"
         let url = URL(string: urlString)
         return url!
     }

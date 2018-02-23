@@ -91,20 +91,20 @@ class LandscapeViewController: UIViewController, UICollectionViewDelegate, UICol
             return collectionView.dequeueReusableCell(withReuseIdentifier:"cell", for: indexPath)
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier:"iconCell", for: indexPath) as! iconCollectionViewCell
-            downloadImage(for: searchResults[indexPath.row], andPlaceOn: cell.iconButton)
+            downloadImage(for: searchResults[indexPath.row], andPlaceOn: cell.iconImageView)
             return cell
         }
     }
 
-    func downloadImage(for searchResult: SearchResult, andPlaceOn button: UIButton) {
+    func downloadImage(for searchResult: SearchResult, andPlaceOn imageView: UIImageView) {
         if let url = URL(string: searchResult.imageSmall) {
             let task = URLSession.shared.downloadTask(with: url) {
-                [weak button] url, response, error in
+                [weak imageView] url, response, error in
                 if error == nil, let url = url, let data = try? Data(contentsOf: url),
                     let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        if let button = button {
-                            button.setImage(image, for: .normal)
+                        if let imageView = imageView {
+                            imageView.image = image
                         }
                     }
                 }
@@ -122,6 +122,14 @@ class LandscapeViewController: UIViewController, UICollectionViewDelegate, UICol
         } else {
             return  searchResults.count + (18 - searchResults.count % 18)
         }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+        let detailsViewController = DetailsViewController(searchResult: searchResults[indexPath.row])
+        detailsViewController.modalTransitionStyle = .crossDissolve
+        detailsViewController.modalPresentationStyle = .overCurrentContext
+        present(detailsViewController, animated: true, completion: nil)
     }
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
